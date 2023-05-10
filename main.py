@@ -1,6 +1,3 @@
-#######
-
-
 import random
 import pygame
 
@@ -8,14 +5,23 @@ FPS = 60
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 700
 
+class Enemy:
+    def __init__(self):
+        self.image = pygame.image.load('Assets/enemy.png').convert_alpha()
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA, 32)
 
 class Player:
     def __init__(self):
         self.image = pygame.image.load('Assets/player.png').convert_alpha()
-        self.surface = pygame.Surface((self.image.get_width(), self.image.get_height()), pygame.SRCALPHA, 32)
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA, 32)
         self.x = WINDOW_WIDTH/2 - self.image.get_width()/2
-        self.y = 650
-        self.speed = 5
+        self.y = 640
+        self.speed = 15
+        self.score = 0
 
     def render(self):
         self.surface.blit(self.image, (0, 0))
@@ -79,9 +85,17 @@ while True:
             intro = True
             in_game = True
             alpha_level = 0
-
     else:
-        pass
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+            if player.x - player.speed <= 0:
+                player.x = 0
+            else:
+                player.x -= player.speed
+        elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+            if player.x + player.speed >= WINDOW_WIDTH - player.width:
+                player.x = WINDOW_WIDTH - player.width
+            else:
+                player.x += player.speed
 
 
     # render & update background
