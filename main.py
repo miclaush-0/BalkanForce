@@ -3,6 +3,20 @@ import time
 
 import pygame
 
+import sys
+import os
+
+
+def resource_path(relative_path):
+    try:
+    # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 FPS = 60
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 700
@@ -23,7 +37,8 @@ class Bullet:
 
 class Enemy:
     def __init__(self, x, y):
-        self.image = pygame.image.load('Assets/enemy.png').convert_alpha()
+        asset_url = resource_path('Assets/enemy.png')
+        self.image = pygame.image.load(asset_url).convert_alpha()
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA, 32)
@@ -36,7 +51,8 @@ class Enemy:
 
 class Player:
     def __init__(self):
-        self.image = pygame.image.load('Assets/player.png').convert_alpha()
+        asset_url = resource_path('Assets/player.png')
+        self.image = pygame.image.load(asset_url).convert_alpha()
         self.width = self.image.get_width()
         self.height = self.image.get_height()
         self.surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA, 32)
@@ -53,19 +69,22 @@ pygame.init()
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 surface = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 clock = pygame.time.Clock()
-font = pygame.font.Font('Fonts/PublicPixel-z84yD.ttf', 40)
-font_ = pygame.font.Font('Fonts/PublicPixel-z84yD.ttf', 30)
+asset_url = resource_path('Fonts/PublicPixel-z84yD.ttf')
+font = pygame.font.Font(asset_url, 40)
+font_ = pygame.font.Font(asset_url, 30)
 
 # loading graphics
 grass = []
 for i in range(0, 4):
     path = 'Assets/Tiles/grass' + str(i) + '.png'
-    grass.append(pygame.image.load(path))
+    asset_url = resource_path(path)
+    grass.append(pygame.image.load(asset_url))
 
 tree = []
 for i in range(0, 3):
     path = 'Assets/Tiles/tree' + str(i) + '.png'
-    tree.append(pygame.image.load(path))
+    asset_url = resource_path(path)
+    tree.append(pygame.image.load(asset_url))
 
 # pre tiles generation
 background = []
@@ -88,7 +107,8 @@ player = Player()
 # bullets
 bullets = []
 
-file = open('data', 'r')
+asset_url = resource_path('data')
+file = open(asset_url, 'r')
 last_score = file.read()
 file.close()
 intro = True
